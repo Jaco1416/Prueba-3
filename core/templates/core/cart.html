@@ -1,0 +1,251 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+<div class="colorlib-loader"></div>
+
+<div id="page">
+	<div class="breadcrumbs">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<p class="bread"><span><a href="{% url 'index' %}">Home</a></span> / <span>Carrito de compras</span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="colorlib-product">
+		<div class="container">
+			<div class="row row-pb-lg">
+				<div class="col-md-10 offset-md-1">
+					<div class="process-wrap">
+						<div class="process text-center active">
+							<p><span>01</span></p>
+							<h3>Carrito de compras</h3>
+						</div>
+						<div class="process text-center">
+							<p><span>02</span></p>
+							<h3>Confirmacion</h3>
+						</div>
+						<div class="process text-center">
+							<p><span>03</span></p>
+							<h3>Transaccion completa</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-pb-lg">
+				<div class="col-md-12">
+					<div class="product-name d-flex">
+						<div class="one-forth text-left px-4">
+							<span>Detalle producto</span>
+						</div>
+						<div class="one-eight text-center">
+							<span>Precio</span>
+						</div>
+						<div class="one-eight text-center">
+							<span>Cantidad</span>
+						</div>
+						<div class="one-eight text-center">
+							<span></span>
+						</div>
+						<div class="one-eight text-center px-4">
+							<span>Eliminar</span>
+						</div>
+					</div>
+					{% for aux in listaCarrito %}
+					{% if user.get_username == aux.usuario %}
+						<div class="product-cart d-flex">
+							<div class="one-forth">
+								<div class="product-img" ><img src="{{ aux.imagen.url }}" style="width: 90px;height: 100px;">
+								</div>
+								<div class="display-tc">
+									<h3>{{ aux.nombre }}</h3>
+									
+									
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">${{ aux.precio }}</span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<p type="text"
+										class=" input-number text-center">{{aux.cantidad}}
+								</p>
+									</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price"></span>
+								</div>
+							</div>
+							
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<form action="" method="post">
+										{% csrf_token %}
+										<input type="hidden" name="id" id="id" value="{{ aux.id }}">
+										<input type="hidden" name="codigop" id="codigop" value="{{aux.codigo}}">
+										<input type="hidden" name="stocks" id="stocks" value="{{aux.cantidad}}">
+										<!--Rescata el stock desde la nueva variable que llamamos cantidad y eso añadeselo en las views al momento de añadir un objeto al carrito-->
+										<button class="btn-light"  style="color: red;" type="submit"><i class="fa-solid fa-trash"></i></button>
+									  </form>
+								</div>
+							</div>
+						</div>
+						{% elif user.is_authenticated == null %}
+							<div class="product-cart d-flex">
+								<div class="one-forth">
+									<div class="product-img" ><img src="{{ aux.imagen.url }}" style="width: 90px;height: 100px;">
+									</div>
+									<div class="display-tc">
+										<h3>{{ aux.nombre }}</h3>
+										
+									</div>
+								</div>
+								<div class="one-eight text-center">
+									<div class="display-tc">
+										<span class="price">${{ aux.precio }}</span>
+									</div>
+								</div>
+								<div class="one-eight text-center">
+									<div class="display-tc">
+										<p type="text"
+											class=" input-number text-center">{{aux.cantidad}}
+									</p>
+										</div>
+								</div>
+								<div class="one-eight text-center">
+									<div class="display-tc">
+										<span class="price"></span>
+									</div>
+								</div>
+								
+								<div class="one-eight text-center">
+									<div class="display-tc">
+										<form action="" method="post">
+											{% csrf_token %}
+											<input type="hidden" name="id" id="id" value="{{ aux.id }}">
+											<input type="hidden" name="codigop" id="codigop" value="{{aux.codigo}}">
+											<input type="hidden" name="stocks" id="stocks" value="{{aux.cantidad}}">
+											<!--Rescata el stock desde la nueva variable que llamamos cantidad y eso añadeselo en las views al momento de añadir un objeto al carrito-->
+											<button class="btn-light"  style="color: red;" type="submit"><i class="fa-solid fa-trash"></i></button>
+										</form>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="row row-pb-lg">
+				<div class="col-md-12">
+					<div class="total-wrap">
+						<div class="row">
+							<div class="col-sm-8">
+								
+							</div>
+							<div class="col-sm-4 text-center">
+								<div class="total">
+									<div class="sub">
+										<p><span>Subtotal (CLP):</span> <span>${{ total }}</span></p>
+										<p><span>Descuento S (CLP):</span> <span>${{ descuento }}</span></p>
+										
+									</div>
+									<div class="grand-total">
+										<p><span><strong>Total (USD):</strong></span> <span>${{ totalDef }}</span></p>
+									</div>
+								</div>
+								<p> <div id='btnPaypal'> </div> </p>
+							</div>
+							<p> 
+						</div>
+					</div>
+				</div>
+			</div>
+
+</div>
+
+<div class="gototop js-top">
+	<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+</div>
+
+{% endblock %}
+
+{% block js %}
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	<script> 
+		paypal.Button.render({
+			env: 'sandbox',
+			client: {
+				sandbox: 'ATeCohVXD0hqN7bIoh98LJ8ncikN89T2nmfZ7M9lSQAjq6BnsDTZpaZgacV889oiiZm1NSZf6REl5Nia',
+				production: 'demo_production_client_id'
+			},
+			local: 'es_CL',
+			style: {
+				size: 'large', //small-medium-large
+				color: 'gold', //gold-black
+				shape: 'pill', // pill-rect
+			},
+			commit: true,
+			payment: function(data, actions) {
+				return actions.payment.create({
+					transactions: [{
+						amount: {
+							total: '20.00', //MONTO A PAGAR
+							currency: 'USD' // USD - CN 
+						}
+					}]
+				});
+			},
+			onAuthorize: function(data, actions){
+				return actions.payment.execute().then(function(){
+					Swal.fire({
+						title: 'Transaccion',
+						text: 'Pago realizado correctamente',
+						icon: 'succes',
+						showCancelButton: false,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						confirmButtonText: 'Aceptar'
+					  });
+				});
+			},
+			onCancel(data){
+				Swal.fire({
+					title: 'Transaccion cancelada',
+					text: 'El pago ha sido cancelado',
+					icon: 'info',
+					showCancelButton: false,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Aceptar'
+				  });
+			},
+			onError(err){
+				Swal.fire({
+					title: 'Error',
+					text: 'Ocurrio un error inesperado',
+					icon: 'info',
+					showCancelButton: false,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Aceptar'
+				});
+			},
+		},'#btnPaypal');
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="{% static 'core/js/mensajes.js' %}"></script>,
+{% endblock %}

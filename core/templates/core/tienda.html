@@ -1,0 +1,180 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+<div id="page">
+
+	<div class="breadcrumbs">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<p class="bread"><span><a href="{% url 'index' %}">Home</a></span> / <span>Tienda</span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="breadcrumbs-two">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					
+				</div>
+				<div class="col-md-6">
+					<h1 style="text-align: center;">Tienda</h1>
+				</div>
+				<div class="col-md-3">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="fluid">
+		<img src="{% static 'core/images/Perro_husky.jpg' %}" class="" alt="Free html5 bootstrap 4 template" style="height: auto;width: auto;">
+	</div>
+	<div class="colorlib-product">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+					<h1 style="color: black;">Todos los productos</h1>
+				</div>
+			</div>
+			<div class="row row-pb-md">
+				{% for aux in listaProductos %}
+					{% if user.is_staff == 1 %}
+						<div class="col-lg-3 mb-4 text-center">
+							<div class="product-entry border">
+								<a href="" class="prod-img">
+									{% if aux.imagen %}
+									<img src="{{ aux.imagen.url }}" class="img-fluid" alt="Free html5 bootstrap 4 template"
+										style="width:250px;height:250px">
+									{% else %}
+									<img src="{% static 'core/images/AAA.jpg' %}" class="img-fluid"
+										alt="Free html5 bootstrap 4 template" style="width:252px;height:250px">
+									{% endif %}
+								</a>
+								<div class="desc">
+									<h2><a href="#">{{ aux.nombre }}</a></h2>
+									<span class="price">${{ aux.precio }}</span>
+									<span class="price">Stock: {{ aux.stock }}</span>
+
+								</div>
+								<div class="bottom-area d-flex px-3">
+									<div class="m-auto d-flex">
+
+										<form action="" method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="nombre" id="nombre" value="{{ aux.nombre }}">
+											<input type="hidden" name="precio" id="precio" value="{{ aux.precio }}">
+											<input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+											<input type="number" name="stocks" id="stocks" min="1" max="{{aux.stock}}"
+												value="1" />
+											<input type="hidden" name="codigop" id="codigop" value="{{aux.codigo}}">
+
+											<input type="submit" class="btn btn-success">
+										</form>
+
+										<!--<a href="#" onclick="añadirCarrito({{ aux.id }})" class="buy-now d-flex justify-content-center align-items-center mx-1">
+											<span><i class="fa-solid fa-cart-shopping" style="color: #36d00b;"></i></span>
+										</a>-->
+										<a href="{% url 'update' aux.id %}"
+											class="heart d-flex justify-content-center align-items-center mx-1">
+											<span><i class="fa-solid fa-pen" style="color: #b1ab02;"></i></span>
+										</a>
+										<a href="#" onclick="deleteProducto({{ aux.id }})"
+											class="heart d-flex justify-content-center align-items-center">
+											<span><i class="fa-solid fa-trash" style="color: #ff0000;"></i></i></span>
+										</a>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					{% elif user.is_staff == 0 %}
+						<div class="col-lg-3 mb-4 text-center">
+							<div class="product-entry border">
+								<a href="" class="prod-img">
+									{% if aux.imagen %}
+									<img src="{{ aux.imagen.url }}" class="img-fluid" alt="Free html5 bootstrap 4 template" style="width:250px;height:250px">
+									{% else %}
+									<img src="{% static 'core/images/AAA.jpg' %}" class="img-fluid"
+										alt="Free html5 bootstrap 4 template" style="width:252px;height:250px">
+									{% endif %}
+								</a>
+								<div class="desc" >
+									<h2><a href="#">{{ aux.nombre }}</a></h2>
+									<span class="price">${{ aux.precio }}</span>
+									<span class="price">Stock: {{ aux.stock }}</span>
+									
+								</div>
+								<div class="bottom-area d-flex px-3">
+									<div class="m-auto d-flex">
+										
+										<form action="" method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="nombre" id="nombre" value="{{ aux.nombre }}">
+											<input type="hidden" name="precio" id="precio" value="{{ aux.precio }}">
+											<input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+											<input type="number" name="stocks" id="stocks" min="1" max="{{ aux.stock }}" value="1"/>
+											<input type="hidden" name="codigop" id="codigop" value="{{ aux.codigo }}">
+											<input type="hidden" name="txtUsuario" value="{{ user.get_username }}">
+									
+											<input type="submit" class="btn btn-success">
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+
+		</div>
+	</div>
+
+	<div class="colorlib-partner">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+					<h2>Colaboradores</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/pedigree_logo.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/logo_wiskas.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/refugio_logo.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/logo_footer.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="gototop js-top">
+	<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock %}

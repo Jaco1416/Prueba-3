@@ -1,0 +1,263 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+
+
+<div class="colorlib-loader"></div>
+
+<div id="page">
+
+	<aside id="colorlib-hero">
+		<div class="flexslider">
+			<ul class="slides">
+				<li style="background-image: url(static/core/images/gato_acostado.jpg);">
+					<div class="overlay"></div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6 offset-sm-3 text-center slider-text">
+								<div class="slider-text-inner">
+									<div class="desc">
+										<h1 class="head-1">Nuevo</h1>
+										<h2 class="head-2">Articulos varios</h2>
+										<h2 class="head-3"></h2>
+										<p class="category"><span>Articulos a beneficio</span></p>
+										<p><a href="{% url 'tienda' %}" class="btn btn-primary">Tienda</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li style="background-image: url(static/core/images/perro_jugando.jpg);">
+					<div class="overlay"></div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6 offset-sm-3 text-center slider-text">
+								<div class="slider-text-inner">
+									<div class="desc">
+										<h1 class="head-1">Ofertas</h1>
+										<h2 class="head-2">alimentos y decorativos</h2>
+										<h2 class="head-3"><strong class="font-weight-bold">10%</strong> Desc</h2>
+										<p class="category"><span>100% Confiables</span></p>
+										<p><a href="{% url 'tienda' %}" class="btn btn-primary">Tienda</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li style="background-image: url(static/core/images/cachorro.jpg);">
+					<div class="overlay"></div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6 offset-sm-3 text-center slider-text">
+								<div class="slider-text-inner">
+									<div class="desc">
+										<h1 class="head-1">Suscribete</h1>
+										<h2 class="head-2">Ayudaras a la caridad</h2>
+										<h2 class="head-3">Descuento de <strong class="font-weight-bold">5%</strong> 
+										</h2>
+										<p class="category"><span>Suscribete y obten beneficios</span></p>
+										{% if user.is_authenticated %}
+										<p><a href="{% url 'suscripcion' %}" class="btn btn-primary">Suscibirse</a></p>
+										{% else %}
+										<p><a href="{% url 'login' %}" class="btn btn-primary">Suscibirse</a></p>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="colorlib-intro">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<h2 class="intro">Al comprar con nosotros apoyas a centros de cuidado de animales abandonados.</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="colorlib-product">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6 text-center">
+					<div class="featured">
+						<a href="#" class="featured-img" style="background-image: url(static/core/images/perro_comiendo.jpg);"></a>
+						<div class="desc">
+							<h2><a href="{% url 'tienda' %}">Alimentos</a></h2>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 text-center">
+					<div class="featured">
+						<a href="{% url 'tienda' %}" class="featured-img"
+							style="background-image: url(static/core/images/gato_collar.jpg);"></a>
+						<div class="desc">
+							<h2><a href="#">Collares</a></h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="colorlib-product">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+					<h2>Productos populares</h2>
+				</div>
+			</div>
+			<div class="row row-pb-md">
+				{% for aux in listaProductos %}
+					{% if user.is_staff == 1 %}
+						{% if aux.popular %}
+						<div class="col-lg-3 mb-4 text-center">
+							<div class="product-entry border">
+								<a href="" class="prod-img">
+									{% if aux.imagen %}
+									<img src="{{ aux.imagen }}" class="img-fluid" alt="Free html5 bootstrap 4 template" style="width:250px;height:250px">
+									{% else %}
+									<img src="{% static 'core/images/AAA.jpg' %}" class="img-fluid"
+										alt="Free html5 bootstrap 4 template" style="width:252px;height:250px">
+									{% endif %}
+								</a>
+								<div class="desc" >
+									<h2><a href="#">{{ aux.nombre }}</a></h2>
+									<span class="price">${{ aux.precio }}</span>
+									
+								</div>
+								<div class="bottom-area d-flex px-3">
+									<div class="m-auto d-flex">
+										
+										<form action="" method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="nombre" id="nombre" value="{{ aux.nombre }}">
+											<input type="hidden" name="precio" id="precio" value="{{ aux.precio }}">
+											<input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+											<input type="number" name="stocks" id="stocks" min="1" max="{{aux.stock}}" value="1"/>
+											<input type="hidden" name="codigop" id="codigop" value="{{aux.codigo}}">
+									
+											<input type="submit" class="btn btn-success">
+										</form>
+
+										<!--<a href="#" onclick="añadirCarrito({{ aux.id }})" class="buy-now d-flex justify-content-center align-items-center mx-1">
+											<span><i class="fa-solid fa-cart-shopping" style="color: #36d00b;"></i></span>
+										</a>-->
+										<a href="{% url 'update' aux.id %}"
+											class="heart d-flex justify-content-center align-items-center mx-1">
+											<span><i class="fa-solid fa-pen" style="color: #b1ab02;"></i></span>
+										</a>
+										<a href="#" onclick="deleteProducto({{ aux.id }})" class="heart d-flex justify-content-center align-items-center">
+											<span><i class="fa-solid fa-trash" style="color: #ff0000;"></i></i></span>
+										</a>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					{% elif user.is_staff == 0 %}
+						{% if aux.popular %}
+						<div class="col-lg-3 mb-4 text-center">
+							<div class="product-entry border">
+								<a href="" class="prod-img">
+									{% if aux.imagen %}
+									<img src="{{ aux.imagen }}" class="img-fluid" alt="Free html5 bootstrap 4 template" style="width:250px;height:250px">
+									{% else %}
+									<img src="{% static 'core/images/AAA.jpg' %}" class="img-fluid"
+										alt="Free html5 bootstrap 4 template" style="width:252px;height:250px">
+									{% endif %}
+								</a>
+								<div class="desc" >
+									<h2><a href="#">{{ aux.nombre }}</a></h2>
+									<span class="price">${{ aux.precio }}</span>
+									
+								</div>
+								<div class="bottom-area d-flex px-3">
+									<div class="m-auto d-flex">
+										
+										<form action="" method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="nombre" id="nombre" value="{{ aux.nombre }}">
+											<input type="hidden" name="precio" id="precio" value="{{ aux.precio }}">
+											<input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+											<input type="number" name="stocks" id="stocks" min="1" max="{{ aux.stock }}" value="1"/>
+											<input type="hidden" name="codigop" id="codigop" value="{{ aux.codigo }}">
+											<input type="hidden" name="txtUsuario" value="{{ user.get_username }}">
+									
+											<input type="submit" class="btn btn-success">
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<p><a href="{% url 'tienda' %}" class="btn btn-primary btn-lg">Ver todos los productos</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="colorlib-partner">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+					<h2>Colaboradores</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/pedigree_logo.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/logo_wiskas.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/refugio_logo.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+				<div class="col partner-col text-center">
+					<img src="{% static 'core/images/logo_footer.png' %}" class="img-fluid"
+						alt="Free html4 bootstrap 4 template" style="width:150px;height:150px">
+				</div>
+			</div>
+		</div>
+	</div>
+	{% for aux in personajes %}
+	<p>Nombre:{{aux.name}} - raza: {{aux.species}} - <img src="{{ aux.image }}"  style="width:250px;height:250px">
+	{% endfor %}
+</div>
+
+<div class="gototop js-top">
+	<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+</div>
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock %}

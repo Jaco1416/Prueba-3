@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+<div id="page">
+            
+
+    <div class="row row-pb-lg">
+        <div class="col-md-12">
+            <div class="product-name d-flex">
+                <div class="one-forth text-left px-4">
+                    <span>Detalle producto</span>
+                </div>
+                <div class="one-eight text-center">
+                    <span>Precio</span>
+                </div>
+                <div class="one-eight text-center">
+                    <span>Cantidad</span>
+                </div>
+                <div class="one-eight text-center">
+                    <span></span>
+                </div>
+            </div>
+            {% for aux in listaHistorialCarrito %}
+            {% if user.get_username == aux.usuario %}
+                <div class="product-cart d-flex">
+                    <div class="one-forth">
+                        <div class="product-img" ><img src="{{ aux.imagen.url }}" style="width: 90px;height: 100px;">
+                        </div>
+                        <div class="display-tc">
+                            <h3>{{ aux.nombre }}</h3>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="one-eight text-center">
+                        <div class="display-tc">
+                            <span class="price">${{ aux.precio }}</span>
+                        </div>
+                    </div>
+                    <div class="one-eight text-center">
+                        <div class="display-tc">
+                            <p type="text"
+                                class=" input-number text-center">{{aux.cantidad}}
+                        </p>
+                            </div>
+                    </div>
+                    <div class="one-eight text-center">
+                        <div class="display-tc">
+                            <span class="price"></span>
+                        </div>
+                    </div>
+                    <div class="one-eight text-center">
+                        <div class="display-tc">
+                            <p type="text"
+                                class=" input-number text-center">{{aux.orden}}
+                        </p>
+                        </div>
+                    </div>
+                    <div class="grand-total">
+                        <p><span><strong>Total (CLP):</strong></span> <span>${{ precio }}</span></p>
+                    </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock %}
