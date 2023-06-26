@@ -10,6 +10,7 @@ class TipoProducto(models.Model):
         return self.descripcion
 
 class TipoEstado(models.Model):
+    codigo = models.IntegerField(primary_key=True)
     estado = models.CharField(max_length=50)
 
     def __str__(self):
@@ -63,7 +64,7 @@ class HistorialCarrito(models.Model):
     cantidad = models.IntegerField()
     nombre = models.CharField(max_length=50)
     precio = models.PositiveIntegerField()
-    imagen = models.ImageField(upload_to="carrito", null=True)
+    imagen = models.ImageField(upload_to="HistorialCarrito", null=True)
     orden = models.IntegerField()
 
     def __str__(self):

@@ -31,6 +31,12 @@ class TipoProductoViewset(viewsets.ModelViewSet):
     #queryset = Producto.objetcs
     serializer_class = TipoProductoSerializer
 
+class TipoEstadoViewset(viewsets.ModelViewSet):
+    queryset = TipoEstado.objects.all()
+    #queryset = Producto.objetcs
+    serializer_class = TipoEstadoSerializer
+
+
 # VISTAS.
 def index(request):
     productosAll = Producto.objects.all() # SELECT * FROM producto
@@ -60,10 +66,10 @@ def index(request):
             prod.save()
 
 
-        #stocks = request.POST.get('stocks')
+        stocks = request.POST.get('stocks')
         codigop = request.POST.get('codigop')
         producto = Producto.objects.get(codigo=int(codigop))
-        #producto.stock -= int(stocks)
+        producto.stock -= int(stocks)
         producto.save()
         
     return render(request, 'core/index.html', data)
@@ -136,6 +142,8 @@ def suscripcion(request):
         usuarios = Suscripcion()
         usuarios.usuario = request.user.get_username()
         usuarios.suscrito = request.POST.get('estado')
+        group = Group.objects.get(name='Suscrito')
+        group.user_set.add(usuarios.usuario)
         usuarios.save()
 
     return render(request, 'core/suscripcion.html', datos)
@@ -187,13 +195,8 @@ def cart(request):
     for i in carritoAll: 
         total += i.precio * i.cantidad
 
-    suscripcionUsuario = Suscripcion()
-    suscripcionUsuario.suscrito = request.POST.get('suscrito')
-    if suscripcionUsuario.suscrito == True:
-        descuento = total*0.05
-        totalDef = (total - descuento)/valor_usd
-    else:
-        totalDef = (total/valor_usd)    
+    
+    totalDef = (total/valor_usd)    
     
     
     
@@ -214,12 +217,25 @@ def cart(request):
    
     return render(request, 'core/cart.html',data)
 
-def pagar(request):
-    carritoAll = Carrito.objects.all()
-    historial.save(carritoAll)
-    Carrito.delete() 
+def pagar(request, usuario):
+        
+    if request.method == 'POST':
+        carrito = Carrito()
+        carrito.usuario = request.POST.get('txtUsuario')
+        carrito.codigo = request.POST.get('codigo')
+        carrito.cantidad = request.POST.get('stocks')
+        carrito.nombre = request.POST.get('nombre')
+        carrito.precio = request.POST.get('txtUsuario')
+        carrito.imagen = request.POST.get('imagen')
+        orden = 0 
+        HistorialCarrito.save()
+        if Carrito.usuario == usuario :
+            orden += 1 
+            HistorialCarrito.save()
+            Carrito.delete() 
+    
 
-    return(request,)
+    return render(request, 'core/cart.html')
     
 
 

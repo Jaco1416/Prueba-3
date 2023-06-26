@@ -45,12 +45,28 @@ class RastreoAdmin(admin.ModelAdmin):
     list_filter = ['codigo']
     list_editable = ['contacto','f_despacho','f_entrega']
 
+class HistorialAdmin(admin.ModelAdmin):
+    list_display = ['orden','tipo','usuario','preciototal']
+    search_fields = ['orden']
+    list_per_page = 10
+    list_filter = ['orden']
+    list_editable = ['tipo']
+
+class HistorialCarritoAdmin(admin.ModelAdmin):
+    list_display = ['orden','imagen','usuario','cantidad','precio','nombre']
+    search_fields = ['orden']
+    list_per_page = 10
+    list_filter = ['orden']
+    
 
 
 
 admin.site.register(TipoProducto)
+admin.site.register(TipoEstado)
 admin.site.register(Producto,ProductoAdmin)
 admin.site.register(Usuarios,UsuarioAdmin)
 admin.site.register(Suscripcion,SuscripcionAdmin)
 admin.site.register(Carrito,CarritoAdmin)
+admin.site.register(Historial,HistorialAdmin)
+admin.site.register(HistorialCarrito,HistorialCarritoAdmin)
 
